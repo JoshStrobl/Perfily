@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html manifest="test.appcache">
+	<head>
+		<title>Perfily Test</title>
+		<script type="text/javascript" src="js/perfily.min.js"></script>
+		<meta charset="utf-8" />
+	</head>
+	<body>
+		<script>
+			var internalPerfilyInstance; // Define internalTest as what perfilyBenchmark will actually run
+
+			var perfilyConstructorInstance = new Perfily({ // Create an instance of Perfily where we benchmark construction of a Perfily Instance
+				"name" : "Perfily Construction",
+				"function" : function(){
+					internalPerfilyInstance = new Perfily();
+				},
+				"outputIntoDocument" : true
+			});
+			perfilyConstructorInstance.Run(); // Run this instance
+
+			var perfilySetNameInstance = new Perfily({ // Create an instance of Perfily where we benchmark SetName of a Perfily Instance
+				"name" : "Perfily SetName",
+				"function" : function(){
+					internalPerfilyInstance.SetName("Internal Perfily Instance");
+				}
+			});
+			perfilySetNameInstance.Run(); // Run this instance
+
+			var perfilySetExpectingInstance = new Perfily({ // Create an instance of Perfily where we benchmark SetExpecting of a Perfily Instance
+				"name" : "Perfily SetExpecting",
+				"function" : function(){
+					internalPerfilyInstance.SetExpecting("bacon");
+				}
+			});
+			perfilySetExpectingInstance.Run(); // Run this instance
+
+			var perfilySetFunctionInstance = new Perfily({ // Create an instance of Perfily where we benchmark SetFunction of a Perfily Instance
+				"name" : "Perfily SetFunction",
+				"function" : function(){
+					internalPerfilyInstance.SetFunction(function(){return "bacon"});
+				}
+			});
+			perfilySetFunctionInstance.Run(); // Run this instance
+
+			var perfilyRunInstance = new Perfily({ // Create an instance of Perfily where we run the internal Perfily Instance
+				"name" : "Perfily Run",
+				"function" : function(){
+					internalPerfilyInstance.Run();
+				}
+			});
+			perfilyRunInstance.Run(); // Run this instance
+		</script>
+	</body>
+</html>

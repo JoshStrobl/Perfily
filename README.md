@@ -1,0 +1,74 @@
+# Perfily #
+
+Perfily is a simple (*no really, like super simple*) JavaScript benchmark and test utility, written in Typescript, that leverages `performance.now()`. It is intentionally minimalistic, with merely doing benchmark and function v.s. expected result comparison.
+
+## Do I always have to create a new instance? ##
+
+Nope. You can use the helper functions to do re-setting of the benchmark's values
+
+## Using Perfily ##
+
+### Creating a Perfily Benchmark ###
+
+You can create an instance of Perfily by doing:
+
+``` javascript
+var benchmark = new Perfily();
+```
+
+Perfily accepts multiple variables on constructions:
+
+Key | Type
+---- | -----
+name | string
+expecting | any
+function | Function
+outputIntoDocument | boolean
+
+Example:
+
+``` javascript
+var benchmark = new Perfily({
+	"name" : "Test",
+	"expecting" : "bacon"
+	"function" : function(){return "bacon";}
+});
+```
+
+### Set / Helper Functions ###
+
+Several functions are offered for setting the properties shown in the "Creating a Perfily Benchmark" section, in the event you don't set them during construction.
+
+**SetName()** Usage:
+
+``` javascript
+benchmark.SetName("Test Benchmark");
+```
+
+**SetExpecting()** Usage:
+
+``` javascript
+benchmark.SetExpecting(value);
+```
+
+**SetFunction()** Usage:
+
+``` javascript
+benchmark.SetFunction(function);
+```
+
+### Run ###
+
+Use the `Run` function to run the benchmark / test.
+
+``` javascript
+benchmark.Run();
+```
+
+It will log to console (or if you set `outputToDocument` to `true` during Perfily instance construction, document), something like:
+
+```
+Test Benchmark passed and took 12.2ms
+```
+
+It will also set the Benchmark's `duration` to the time it took to run the test. So you can use something like `benchmark.duration` and get the entire, non-fixed, duration of the test.
