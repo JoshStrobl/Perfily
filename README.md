@@ -6,6 +6,12 @@ Perfily is a simple (*no really, like super simple*) JavaScript benchmark and te
 
 Nope. You can use the helper functions to do re-setting of the benchmark's values
 
+## Developing Perfily ##
+
+To develop Perfily, you need the `compiler` tool from [StroblIndustries/CodeUtils](https://github.com/StroblIndustries/CodeUtils) and have it set in your local `build` dir within Perfily's repo.
+
+You'll also need to run the `bootstrap` tool from CodeUtils as well to get the necessary packages.
+
 ## Using Perfily ##
 
 ### Creating a Perfily Benchmark ###
