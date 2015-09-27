@@ -92,7 +92,7 @@ class Perfily {
 					if (times[timeIndex] !== 0){ // If this is not an absolute zero
 						average += times[timeIndex]; // Add time to average
 					}
-					else{ // If this is an absolute zero, don't add to average (that'll skew the averaging9
+					else{ // If this is an absolute zero, don't add to average (that'll skew the averaging)
 						timesAverageToRemove++; // Add 1 to the timesAverageToRemove
 					}
 			}
