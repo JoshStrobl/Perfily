@@ -1,31 +1,39 @@
 // This is the Perfily class
 
 class Perfily {
-	name : string; // Set the name of this Perfily Benchmark
 	duration : number; // Duration the Benchmark took
 	expecting : any; // Set expecting to any
-	testFunction : Function; // Set the function of this Perfily Benchmark
+	iterations : number; // Set iterations to number
+	name : string; // Set the name of this Perfily Benchmark
 	outputIntoDocument : boolean; // Define outputIntoDocument as a boolean, defaulting to false
+	passed : boolean; // Define passed as a boolean, defaulting to true
+	testFunction : Function; // Set the function of this Perfily Benchmark
+
 
 	constructor(benchmarkProperties ?: Object){
+		this.iterations = 1; // Set default iterations to 1
+		this.passed = true; // Default passed to true
+		this.outputIntoDocument = false; // Log to console and not document
+
 		if (typeof benchmarkProperties == "object"){
 			if (typeof benchmarkProperties["name"] == "string"){ // If a Benchmark Name is defined
 				this.name = benchmarkProperties["name"]; // Set the name of this Perfily benchmark to benchmarkName
-			}
-
-			if (typeof benchmarkProperties["function"] == "function"){ // If a Benchmark Function is defined
-				this.testFunction = benchmarkProperties["function"]; // Set the testFunction of this Perfily benchmark to benchmarkFunction
 			}
 
 			if (typeof benchmarkProperties["expecting"] !== "undefined"){ // If an expected result is provided
 				this.expecting = benchmarkProperties["expecting"]; // Set expecting of this Perfily benchmark to the benchmarkExpecting
 			}
 
+			if (typeof benchmarkProperties["iterations"] == "number"){ // If iterations is a number
+				this.iterations = benchmarkProperties["iterations"]; // Set expecting of this Perfily benchmark to the benchmarkExpecting
+			}
+
+			if (typeof benchmarkProperties["function"] == "function"){ // If a Benchmark Function is a function
+				this.testFunction = benchmarkProperties["function"]; // Set the testFunction of this Perfily benchmark to benchmarkFunction
+			}
+
 			if (typeof benchmarkProperties["outputIntoDocument"] == "boolean"){ // If outputIntoDocument is provided as a boolean
 				this.outputIntoDocument = benchmarkProperties["outputIntoDocument"]; // Set outputIntoDocument of this Perfily benchmark
-			}
-			else{ // If it is not defined or not as a boolean
-				this.outputIntoDocument = false; // Log to console and not document
 			}
 		}
 	}
@@ -34,6 +42,10 @@ class Perfily {
 
 	SetExpecting(benchmarkExpectedResult : Function){ // Set Expecting of this Perfily benchmark
 		this.expecting = benchmarkExpectedResult;
+	}
+
+	SetIterations(iterations : number){ // Set Iterations of this Perfily benchmark
+		this.iterations = iterations;
 	}
 
 	SetFunction(benchmarkFunction : Function){ // Set Function of this Perfily benchmark
@@ -49,21 +61,51 @@ class Perfily {
 	// #region Run Perfily Benchmark
 
 	Run(){
-		var testStartTime : number = performance.now(); // Get the current microsecond-precise "time" of when the test started
-		var potentialBenchmarkResult : any = this.testFunction(); // Run the testFunction, assigning any value to potentialBenchmarkResult
-		var testEndTime : number = performance.now(); // Get the current microsecond-precise "time" of when the test ended
+		var times : Array<number> = []; // Define times as an Array of numbers
+		var iteration = 0;
+		var iterationString = "iteration";
 
-		var testPassed : string = "passed"; // Define testPassed as defaulting to "passed"
+		while (iteration < this.iterations){
+			var testStartTime : number = performance.now(); // Get the current microsecond-precise "time" of when the test started
+			var potentialBenchmarkResult : any = this.testFunction(); // Run the testFunction, assigning any value to potentialBenchmarkResult
+			var testEndTime : number = performance.now(); // Get the current microsecond-precise "time" of when the test ended
 
-		if (typeof this.expecting !== "undefined"){ // If there is an expected result of this function
-			if (this.expecting !== potentialBenchmarkResult){ // If the results are NOT the same
-				testPassed = "failed"; // Change testPassed to "failed"
+			var testPassed : string = "passed"; // Define testPassed as defaulting to "passed"
+
+			if (typeof this.expecting !== "undefined"){ // If there is an expected result of this function
+				this.passed = (this.expecting == potentialBenchmarkResult) // Set this.passed to the boolean value of comparing this.expecting with the result
 			}
+
+			times.push((testEndTime - testStartTime)); // Push to times a new number that is this specific iteration's amount
+			iteration++;
 		}
 
-		this.duration = (testEndTime - testStartTime); // Define the Benchmark duration as the time the test took
+		// #region Average Iteration Times
 
-		var testResultMessage : string= this.name + " " + testPassed + " and took " +  Number(this.duration.toFixed(2)) + "ms" // Set as  the name, pass/fail status, and duration
+
+		if (this.iterations > 1){ // If there was multiple iterations
+			var average = 0;
+			iterationString += "s"; // Add s to the end of the iterationString to indicate multiple iterations
+			var timesAverageToRemove = 0; // Define timesAverageToRemove as 0
+
+			for (var timeIndex = 0; timeIndex < times.length; timeIndex++){
+					if (times[timeIndex] !== 0){ // If this is not an absolute zero
+						average += times[timeIndex]; // Add time to average
+					}
+					else{ // If this is an absolute zero, don't add to average (that'll skew the averaging9
+						timesAverageToRemove++; // Add 1 to the timesAverageToRemove
+					}
+			}
+
+			this.duration = (average / (times.length - timesAverageToRemove)); // Set duration to the average / times.length
+		}
+		else{ // If there was only one iteration
+			this.duration = times[0];
+		}
+
+		// #endregion
+
+		var testResultMessage : string= this.name + " " + testPassed + ", running " + this.iterations.toString() + " " + iterationString + ", and took an average of " +  this.duration.toFixed(4) + "ms" // Set as  the name, pass/fail status, and duration
 
 		if (this.outputIntoDocument == false){ // If we are logging to console (default action)
 			console.log(testResultMessage);

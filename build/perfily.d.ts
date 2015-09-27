@@ -1,11 +1,14 @@
 declare class Perfily {
-    name: string;
     duration: number;
     expecting: any;
-    testFunction: Function;
+    iterations: number;
+    name: string;
     outputIntoDocument: boolean;
+    passed: boolean;
+    testFunction: Function;
     constructor(benchmarkProperties?: Object);
     SetExpecting(benchmarkExpectedResult: Function): void;
+    SetIterations(iterations: number): void;
     SetFunction(benchmarkFunction: Function): void;
     SetName(benchmarkName: string): void;
     Run(): void;
