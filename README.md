@@ -29,6 +29,7 @@ Key | Type
 name | string
 expecting | any
 function | Function
+iterations | number
 outputIntoDocument | boolean
 
 Example:
@@ -36,7 +37,8 @@ Example:
 ``` javascript
 var benchmark = new Perfily({
 	"name" : "Test",
-	"expecting" : "bacon"
+	"expecting" : "bacon",
+    "iterations" : 100,
 	"function" : function(){return "bacon";}
 });
 ```
@@ -63,6 +65,12 @@ benchmark.SetExpecting(value);
 benchmark.SetFunction(function);
 ```
 
+**SetIterations()** Usage:
+
+``` javascript
+benchmark.SetIterations(num);
+```
+
 ### Run ###
 
 Use the `Run` function to run the benchmark / test.
@@ -78,3 +86,5 @@ Test Benchmark passed and took 12.2ms
 ```
 
 It will also set the Benchmark's `duration` to the time it took to run the test. So you can use something like `benchmark.duration` and get the entire, non-fixed, duration of the test.
+
+It will run over `x` amount of iterations, where `x` is the amount of iterations defined for this Perfily benchmark, defaulting to 1. The duration will be the average of the individual iteration times.
