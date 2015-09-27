@@ -82,7 +82,7 @@ benchmark.Run();
 It will log to console (or if you set `outputToDocument` to `true` during Perfily instance construction, document), something like:
 
 ```
-Test Benchmark passed and took 12.2ms
+Test Benchmark passed, running over 100 iterations, and took 12.2ms
 ```
 
 It will also set the Benchmark's `duration` to the time it took to run the test. So you can use something like `benchmark.duration` and get the entire, non-fixed, duration of the test.
