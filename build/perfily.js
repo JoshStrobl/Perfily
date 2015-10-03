@@ -3,11 +3,15 @@ var Perfily = (function () {
     function Perfily(benchmarkProperties) {
         this.iterations = 1;
         this.autoclearExpecting = false;
+        this.autorun = false;
         this.passed = true;
         this.outputIntoDocument = false;
         if (typeof benchmarkProperties == "object") {
             if (typeof benchmarkProperties["autoclearExpecting"] == "boolean") {
                 this.autoclearExpecting = benchmarkProperties["autoclearExpecting"];
+            }
+            if (typeof benchmarkProperties["autorun"] == "boolean") {
+                this.autorun = benchmarkProperties["autorun"];
             }
             if (typeof benchmarkProperties["expecting"] !== "undefined") {
                 this.expecting = benchmarkProperties["expecting"];
@@ -25,6 +29,9 @@ var Perfily = (function () {
                 this.outputIntoDocument = benchmarkProperties["outputIntoDocument"];
             }
         }
+        if ((this.autorun) && (typeof this.testFunction == "function")) {
+            this.Run();
+        }
     }
     Perfily.prototype.SetExpecting = function (benchmarkExpectedResult) {
         if (benchmarkExpectedResult !== "") {
@@ -39,6 +46,9 @@ var Perfily = (function () {
     };
     Perfily.prototype.SetFunction = function (benchmarkFunction) {
         this.testFunction = benchmarkFunction;
+        if (this.autorun) {
+            this.Run();
+        }
     };
     Perfily.prototype.SetName = function (benchmarkName) {
         this.name = benchmarkName;

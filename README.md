@@ -27,6 +27,7 @@ Perfily accepts multiple variables on constructions:
 Key | Type
 ---- | -----
 autoclearExpecting | boolean
+autorun | boolean
 expecting | any
 function | Function
 iterations | number
@@ -68,6 +69,8 @@ benchmark.SetExpecting(value);
 ``` javascript
 benchmark.SetFunction(function);
 ```
+
+**Note:** If `autorun` is set to `true` for this Perfily instance, this will immediately run the test.
 
 **SetIterations()** Usage:
 

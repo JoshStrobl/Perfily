@@ -2,6 +2,7 @@
 
 class Perfily {
 	autoclearExpecting : boolean; // autoclearExpecting is a boolean to determine whether we should remove Expecting after each Run() (helps when reusing a Perfily instance)
+	autorun : boolean; // autorun is a boolean to determine whether we should automatically run the test after setting the function
 	duration : number; // Duration the Benchmark took
 	expecting : any; // Set expecting to any
 	iterations : number; // Set iterations to number
@@ -14,6 +15,7 @@ class Perfily {
 	constructor(benchmarkProperties ?: Object){
 		this.iterations = 1; // Set default iterations to 1
 		this.autoclearExpecting = false; // Default autoclearExpecting to false
+		this.autorun = false; // Default autorun to false
 		this.passed = true; // Default passed to true
 		this.outputIntoDocument = false; // Log to console and not document
 
@@ -21,6 +23,10 @@ class Perfily {
 
 			if (typeof benchmarkProperties["autoclearExpecting"] == "boolean"){ // If autoclearExpecting is provided as a boolean
 				this.autoclearExpecting = benchmarkProperties["autoclearExpecting"]; // Set autoclearExpecting of this Perfily benchmark
+			}
+
+			if (typeof benchmarkProperties["autorun"] == "boolean"){ // If autorun is provided as a boolean
+				this.autorun = benchmarkProperties["autorun"]; // Set autorun of this Perfily benchmark
 			}
 
 			if (typeof benchmarkProperties["expecting"] !== "undefined"){ // If an expected result is provided
@@ -43,6 +49,10 @@ class Perfily {
 				this.outputIntoDocument = benchmarkProperties["outputIntoDocument"]; // Set outputIntoDocument of this Perfily benchmark
 			}
 		}
+
+		if ((this.autorun) && (typeof this.testFunction == "function")){ // If we should autorun the test
+			this.Run(); // Run test
+		}
 	}
 
 	// #region Separate Set functions
@@ -61,6 +71,10 @@ class Perfily {
 
 	SetFunction(benchmarkFunction : Function){ // Set Function of this Perfily benchmark
 		this.testFunction = benchmarkFunction;
+
+		if (this.autorun){ // If we are supposed to autorun the Test
+			this.Run(); // Run the test
+		}
 	}
 
 	SetName(benchmarkName : string){ // Set Name of this Perfily benchmark
@@ -96,7 +110,7 @@ class Perfily {
 		if (this.autoclearExpecting){ // If we are supposed to autoclear expecting var
 			this.SetExpecting(""); // Clear
 		}
-		
+
 		// #endregion
 
 		// #region Average Iteration Times
