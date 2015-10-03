@@ -40,7 +40,7 @@ class Perfily {
 
 	// #region Separate Set functions
 
-	SetExpecting(benchmarkExpectedResult : Function){ // Set Expecting of this Perfily benchmark
+	SetExpecting(benchmarkExpectedResult : any){ // Set Expecting of this Perfily benchmark
 		this.expecting = benchmarkExpectedResult;
 	}
 

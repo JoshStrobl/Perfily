@@ -7,7 +7,7 @@ declare class Perfily {
     passed: boolean;
     testFunction: Function;
     constructor(benchmarkProperties?: Object);
-    SetExpecting(benchmarkExpectedResult: Function): void;
+    SetExpecting(benchmarkExpectedResult: any): void;
     SetIterations(iterations: number): void;
     SetFunction(benchmarkFunction: Function): void;
     SetName(benchmarkName: string): void;
