@@ -26,16 +26,18 @@ Perfily accepts multiple variables on constructions:
 
 Key | Type
 ---- | -----
-name | string
+autoclearExpecting | boolean
 expecting | any
 function | Function
 iterations | number
+name | string
 outputIntoDocument | boolean
 
 Example:
 
 ``` javascript
 var benchmark = new Perfily({
+	"autoclearExpecting" : true,
 	"name" : "Test",
 	"expecting" : "bacon",
     "iterations" : 100,
@@ -58,6 +60,8 @@ benchmark.SetName("Test Benchmark");
 ``` javascript
 benchmark.SetExpecting(value);
 ```
+
+**Note:** If you set value to `""` (an empty string), it will remove the `expecting` variable from that particular Perfily instance.
 
 **SetFunction()** Usage:
 
@@ -88,3 +92,6 @@ Test Benchmark passed, running over 100 iterations, and took 12.2ms
 It will also set the Benchmark's `duration` to the time it took to run the test. So you can use something like `benchmark.duration` and get the entire, non-fixed, duration of the test.
 
 It will run over `x` amount of iterations, where `x` is the amount of iterations defined for this Perfily benchmark, defaulting to 1. The duration will be the average of the individual iteration times.
+
+If `autoclearExpecting` is set to `true` (default: `false`), it will remove the `expecting` variable from that particular Perfily instance.  This is handy if you are using a single Perfily instance for multiple tests,
+and don't want the residual "expecting" variable.

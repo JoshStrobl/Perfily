@@ -1,6 +1,7 @@
 // This is the Perfily class
 
 class Perfily {
+	autoclearExpecting : boolean; // autoclearExpecting is a boolean to determine whether we should remove Expecting after each Run() (helps when reusing a Perfily instance)
 	duration : number; // Duration the Benchmark took
 	expecting : any; // Set expecting to any
 	iterations : number; // Set iterations to number
@@ -12,12 +13,14 @@ class Perfily {
 
 	constructor(benchmarkProperties ?: Object){
 		this.iterations = 1; // Set default iterations to 1
+		this.autoclearExpecting = false; // Default autoclearExpecting to false
 		this.passed = true; // Default passed to true
 		this.outputIntoDocument = false; // Log to console and not document
 
 		if (typeof benchmarkProperties == "object"){
-			if (typeof benchmarkProperties["name"] == "string"){ // If a Benchmark Name is defined
-				this.name = benchmarkProperties["name"]; // Set the name of this Perfily benchmark to benchmarkName
+
+			if (typeof benchmarkProperties["autoclearExpecting"] == "boolean"){ // If autoclearExpecting is provided as a boolean
+				this.autoclearExpecting = benchmarkProperties["autoclearExpecting"]; // Set autoclearExpecting of this Perfily benchmark
 			}
 
 			if (typeof benchmarkProperties["expecting"] !== "undefined"){ // If an expected result is provided
@@ -32,6 +35,10 @@ class Perfily {
 				this.testFunction = benchmarkProperties["function"]; // Set the testFunction of this Perfily benchmark to benchmarkFunction
 			}
 
+			if (typeof benchmarkProperties["name"] == "string"){ // If a Benchmark Name is defined
+				this.name = benchmarkProperties["name"]; // Set the name of this Perfily benchmark to benchmarkName
+			}
+
 			if (typeof benchmarkProperties["outputIntoDocument"] == "boolean"){ // If outputIntoDocument is provided as a boolean
 				this.outputIntoDocument = benchmarkProperties["outputIntoDocument"]; // Set outputIntoDocument of this Perfily benchmark
 			}
@@ -41,7 +48,11 @@ class Perfily {
 	// #region Separate Set functions
 
 	SetExpecting(benchmarkExpectedResult : any){ // Set Expecting of this Perfily benchmark
-		this.expecting = benchmarkExpectedResult;
+		if (benchmarkExpectedResult !== ""){ // If we aren't using "" to clear out expecting
+			this.expecting = benchmarkExpectedResult;
+		} else{ // If we are clearing out expecting
+			this.expecting = undefined; // Set expecting as undefined
+		}
 	}
 
 	SetIterations(iterations : number){ // Set Iterations of this Perfily benchmark
@@ -80,8 +91,15 @@ class Perfily {
 			iteration++;
 		}
 
-		// #region Average Iteration Times
+		// #region Autoclear Expecting Check
 
+		if (this.autoclearExpecting){ // If we are supposed to autoclear expecting var
+			this.SetExpecting(""); // Clear
+		}
+		
+		// #endregion
+
+		// #region Average Iteration Times
 
 		if (this.iterations > 1){ // If there was multiple iterations
 			var average = 0;
