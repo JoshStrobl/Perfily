@@ -21,10 +21,10 @@ You'll also need to run the `bootstrap` tool from CodeUtils as well to get the n
 
 Both the Perfily Suite and Perfily Test creation functions accept a set of arguments in their properties Object. The options below are shared between both Suites and Tests, meaning that in both creation functions, you may add the following options:
 
-Option | Type | Default
----- | ----- | -----
-Output | boolean | false
-OutputIntoDocument | boolean | false
+Option | Type | Default
+---- | ----- | -----
+Output | boolean | false
+OutputIntoDocument | boolean | false
 
 If you set Output to `true` but did not set OutputIntoDocument, it will output to the browser's console.
 
