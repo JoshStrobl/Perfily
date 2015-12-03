@@ -225,7 +225,7 @@ This section descriptions what properties are set after running a Suite or Test.
 Upon running a Suite or a Test associated with a Suite, it will set:
 
 Option | Type | Description
------ | ----- | -----
+----- | ----- | -----
 ShortestTestLength | number | This is a length of time it took the shortest test.
 ShortestTestObject | Object | This is the Object of the Test that took the shortest amount of the time.
 LongestTestLength | number | This is a length of time it took the longest test.
