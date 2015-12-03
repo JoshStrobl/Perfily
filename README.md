@@ -53,11 +53,11 @@ Option | Type | Description | Default
 ---- | ----- | ----- | -----
 AutoclearExpecting | boolean | Remove Expecting after each Run() | `false`
 Autorun | boolean | Automatically run the test after setting the function | `false`
-Description | string | Description of this Perfily Test | ``
-Expecting | any | What result to expect from TestFunction | ``
+Description | string | Description of this Perfily Test | ` `
+Expecting | any | What result to expect from TestFunction | ` `
 Iterations | number | Number of times to run TestFunction | `1`
 Suite | string | Name of the Suite (if any) to associate test with | `generic`
-TestFunction | Function | Function of this Perfily Test | ``
+TestFunction | Function | Function of this Perfily Test | ` `
 
 Notes:
 
@@ -224,9 +224,9 @@ This section descriptions what properties are set after running a Suite or Test.
 
 Upon running a Suite or a Test associated with a Suite, it will set:
 
-Option | Type | Description
+Option | Type | Description
 ----- | ----- | -----
-ShortestTestLength | number | This is a length of time it took the shortest test.
+ShortestTestLength | number | This is a length of time it took the shortest test.
 ShortestTestObject | Object | This is the Object of the Test that took the shortest amount of the time.
 LongestTestLength | number | This is a length of time it took the longest test.
 LongestTestObject | Object | This is the Object of the Test that took the longest amount of the time.
@@ -236,7 +236,7 @@ TotalDurationOfTests | number | This is the combined duration of **all** the Tes
 
 Upon running a Test, aside from the properties set in the "Suite and Test" section, it will also set the following properties of the Test's Object:
 
-Option | Type | Description
------ | ----- | -----
+Option | Type | Description
+----- | ----- | -----
 Duration | number | This is the duration the Test's TestFunction took to complete.
 Passed | boolean | This is a boolean value as to whether or not the test passed.
