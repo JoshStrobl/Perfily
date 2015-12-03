@@ -7,55 +7,59 @@
 	</head>
 	<body>
 		<script>
-			var internalPerfilyInstance; // Define internalTest as what perfilyBenchmark will actually run
+			perfily.suite.New("Perfily", {"Output" : true, "OutputIntoDocument" : true}); // Create a new Suite
 
-			var perfilyConstructorInstance = new Perfily({ // Create an instance of Perfily where we benchmark construction of a Perfily Instance
-				"name" : "Perfily Construction",
-				"function" : function(){
-					internalPerfilyInstance = new Perfily();
-				},
-				"outputIntoDocument" : true
-			});
-			perfilyConstructorInstance.Run(); // Run this instance
+			var internalPerfilyInstance; // Define internalPerfilyInstance as the Perfily Instance that will actually be tested against
 
-			var perfilySetNameInstance = new Perfily({ // Create an instance of Perfily where we benchmark SetName of a Perfily Instance
-				"name" : "Perfily SetName",
-				"iterations" : 100,
-				"function" : function(){
-					internalPerfilyInstance.SetName("Internal Perfily Instance");
+			var perfilyConstructorInstance = perfily.test.New({ // Create an instance of Perfily where we benchmark construction of a Perfily Instance
+				"Description" : "Perfily Construction",
+				"TestFunction" : function(){
+					internalPerfilyInstance = perfily.test.New({});
 				},
-				"outputIntoDocument" : true
+				"OutputIntoDocument" : true,
+				"Suite" : "Perfily"
 			});
-			perfilySetNameInstance.Run(); // Run this instance
 
-			var perfilySetExpectingInstance = new Perfily({ // Create an instance of Perfily where we benchmark SetExpecting of a Perfily Instance
-				"name" : "Perfily SetExpecting",
-				"iterations" : 100,
-				"function" : function(){
-					internalPerfilyInstance.SetExpecting("bacon");
+			var perfilyDescriptionInstance = perfily.test.New({ // Create an instance of Perfily where we benchmark setting the description of the instance
+				"Description" : "Perfily SetProperty Description",
+				"Iterations" : 100,
+				"TestFunction" : function(){
+					perfily.data.SetProperty(internalPerfilyInstance, "Description", "Internal Perfily Instance");
 				},
-				"outputIntoDocument" : true
+				"OutputIntoDocument" : true,
+				"Suite" : "Perfily"
 			});
-			perfilySetExpectingInstance.Run(); // Run this instance
 
-			var perfilySetFunctionInstance = new Perfily({ // Create an instance of Perfily where we benchmark SetFunction of a Perfily Instance
-				"name" : "Perfily SetFunction",
-				"iterations" : 100,
-				"function" : function(){
-					internalPerfilyInstance.SetFunction(function(){return "bacon"});
+			var perfilyExpectingInstance = perfily.test.New({ // Create an instance of Perfily where we benchmark setting the Expecting of the instance
+				"Description" : "Perfily SetProperty Expecting",
+				"Iterations" : 100,
+				"TestFunction" : function(){
+					perfily.data.SetProperty(internalPerfilyInstance, "Expecting", "bacon");
 				},
-				"outputIntoDocument" : true
+				"OutputIntoDocument" : true,
+				"Suite" : "Perfily"
 			});
-			perfilySetFunctionInstance.Run(); // Run this instance
 
-			var perfilyRunInstance = new Perfily({ // Create an instance of Perfily where we run the internal Perfily Instance
-				"name" : "Perfily Run",
-				"function" : function(){
-					internalPerfilyInstance.Run();
+			var perfilySetTestFunctionInstance = perfily.test.New({ // Create an instance of Perfily where we benchmark setting the Function of the instance
+				"Description" : "Perfily SetProperty Function",
+				"Iterations" : 100,
+				"TestFunction" : function(){
+					perfily.data.SetProperty(internalPerfilyInstance, "TestFunction", function(){return "bacon"});
 				},
-				"outputIntoDocument" : true
+				"OutputIntoDocument" : true,
+				"Suite" : "Perfily"
 			});
-			perfilyRunInstance.Run(); // Run this instance
+
+			var perfilyRunInstance = perfily.test.New({ // Create an instance of Perfily where we run the internal Perfily Instance
+				"Description" : "Perfily Run",
+				"TestFunction" : function(){
+					perfily.test.Run(internalPerfilyInstance);
+				},
+				"OutputIntoDocument" : true,
+				"Suite" : "Perfily"
+			});
+
+			perfily.suite.Run("Perfily"); // Run the Perfily Suite
 		</script>
 	</body>
 </html>
