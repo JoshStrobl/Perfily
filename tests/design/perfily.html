@@ -59,6 +59,16 @@
 				"Suite" : "Perfily"
 			});
 
+			var perfilyExportInstance = perfily.test.New({ // Create an instance of Perfily where we run the Suite Export (and therefore also Test Export) function
+				"Description" : "Perfily Suite Export",
+				"Iterations" : 100,
+				"TestFunction" : function(){
+					perfily.suite.Export("Perfily", ["Description", "Duration"]);
+				},
+				"OutputIntoDocument" : true,
+				"Suite" : "Perfily"
+			});
+
 			perfily.suite.Run("Perfily"); // Run the Perfily Suite
 		</script>
 	</body>

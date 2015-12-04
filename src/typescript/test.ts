@@ -74,6 +74,20 @@ module perfily.test {
 
     export var OutputResult : Function = perfily.data.OutputResult; // Helper function for Test output
 
+	// Export
+	// This function will export an Object with the options specified
+	export function Export(id : string, options : Array<string>) : Object {
+		let exportObject : Object = {}; // Create a new export Object that'll hold the data (if any)
+
+		if (perfily.data.IsObject(id)){ // If this is a Test
+			for (let option of options){ // For each option of options
+				exportObject[option] = perfily.data.GetProperty(id, option); // Get the value if this property, if any, and assign to the option key in exportObject
+			}
+		}
+
+		return exportObject;
+	}
+
 	// Run
 	// This function will run the test.
 	export function Run(id : string) {

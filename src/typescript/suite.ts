@@ -29,6 +29,21 @@ module perfily.suite {
 
     export var OutputResult : Function = perfily.data.OutputResult; // Helper function for Suite output
 
+	// Export
+	// This function will export an Array of Objects, where each Object is an individual Test.
+	export function Export(suiteName: string, options : Array<string>) : Array<Object> {
+		let exportObjects : Array<Object> = []; // Create an empty array to push Objects to
+
+		if (perfily.data.IsObject(suiteName)){ // If the Suite Exists
+			for (var test of perfily.data.GetProperty(suiteName, "Tests")){ // For each Test key in the Tests array.
+				let exportedTestObject : Object = perfily.test.Export(test, options); // Get the exported options of this Test
+				exportObjects.push(exportedTestObject); // Push the exportedTestObject to exportObjects
+			}
+		}
+
+		return exportObjects;
+	}
+
     // Run
     // This function will run all the Tests of the Suite
     export function Run(suiteName : string){

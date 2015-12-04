@@ -32,6 +32,7 @@ declare module perfily.test {
     function NewId(suiteName: string): string;
     function New(testProperties: any): string;
     var OutputResult: Function;
+    function Export(id: string, options: Array<string>): Object;
     function Run(id: string): void;
     function SetDescription(id: string, testName: string): boolean;
     function SetExpecting(id: string, benchmarkExpectedResult: any): boolean;
@@ -41,6 +42,7 @@ declare module perfily.test {
 declare module perfily.suite {
     function New(suiteName: string, suiteProperties: any): void;
     var OutputResult: Function;
+    function Export(suiteName: string, options: Array<string>): Array<Object>;
     function Run(suiteName: string): void;
     function UpdateTotalDuration(suiteName: string, latestTestDuration: number): boolean;
 }

@@ -126,6 +126,17 @@ var perfily;
         }
         test.New = New;
         test.OutputResult = perfily.data.OutputResult;
+        function Export(id, options) {
+            var exportObject = {};
+            if (perfily.data.IsObject(id)) {
+                for (var _i = 0; _i < options.length; _i++) {
+                    var option = options[_i];
+                    exportObject[option] = perfily.data.GetProperty(id, option);
+                }
+            }
+            return exportObject;
+        }
+        test.Export = Export;
         function Run(id) {
             if (perfily.data.IsObject(id)) {
                 var suite_1 = perfily.data.GetProperty(id, "Suite");
@@ -219,6 +230,18 @@ var perfily;
         }
         suite.New = New;
         suite.OutputResult = perfily.data.OutputResult;
+        function Export(suiteName, options) {
+            var exportObjects = [];
+            if (perfily.data.IsObject(suiteName)) {
+                for (var _i = 0, _a = perfily.data.GetProperty(suiteName, "Tests"); _i < _a.length; _i++) {
+                    var test = _a[_i];
+                    var exportedTestObject = perfily.test.Export(test, options);
+                    exportObjects.push(exportedTestObject);
+                }
+            }
+            return exportObjects;
+        }
+        suite.Export = Export;
         function Run(suiteName) {
             if (perfily.data.IsObject(suiteName)) {
                 for (var _i = 0, _a = perfily.data.GetProperty(suiteName, "Tests"); _i < _a.length; _i++) {
