@@ -6,11 +6,17 @@ module perfily.data {
     // GetProperty
     // This function will get the property of the Suite or Test
     export function GetProperty(id : string, property : string) : any {
+        let value : any = false; // Set value as default to false
+
         if (perfily.data.IsObject(id)){ // If the Id passed is a valid Suite or Test Object
-            return perfily.data.store[id][property]; // Return the property from the id Object
-        } else { // If this is not a Suite or Test Object
-            return false; // Default to false
+            let propertyValue = perfily.data.store[id][property]; // Get the propertyValue if it exists
+
+            if (typeof propertyValue !== "undefined"){ // If the value exists
+                value = propertyValue; // Change value to propertyValue
+            }
         }
+
+        return value;
     }
 
     // IsObject

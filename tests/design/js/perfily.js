@@ -4,12 +4,14 @@ var perfily;
     (function (data) {
         data.store = {};
         function GetProperty(id, property) {
+            var value = false;
             if (perfily.data.IsObject(id)) {
-                return perfily.data.store[id][property];
+                var propertyValue = perfily.data.store[id][property];
+                if (typeof propertyValue !== "undefined") {
+                    value = propertyValue;
+                }
             }
-            else {
-                return false;
-            }
+            return value;
         }
         data.GetProperty = GetProperty;
         function IsObject(key) {
@@ -81,14 +83,16 @@ var perfily;
         test.NewId = NewId;
         function New(testProperties) {
             if ((typeof testProperties == "object") && (!Array.isArray(testProperties))) {
-                if (typeof testProperties.AutoclearExpecting == "undefined") {
-                    testProperties.AutoclearExpecting = false;
+                if ((typeof testProperties.Suite !== "string") || (testProperties.Suite == "")) {
+                    testProperties.Suite = "generic";
+                }
+                perfily.suite.New(testProperties.Suite, {});
+                var id = perfily.test.NewId(testProperties.Suite);
+                if (typeof testProperties.AutoclearExpecting !== "boolean") {
+                    testProperties.AutoclearExpecting = perfily.data.GetProperty(testProperties.Suite, "AutoclearExpecting");
                 }
                 if (typeof testProperties.Autorun !== "boolean") {
-                    testProperties.Autorun = false;
-                }
-                if (typeof testProperties.AutoclearExpecting !== "boolean") {
-                    testProperties.AutoclearExpecting = false;
+                    testProperties.Autorun = perfily.data.GetProperty(testProperties.Suite, "Autorun");
                 }
                 if (typeof testProperties.Description !== "string") {
                     testProperties.Description = "";
@@ -97,22 +101,21 @@ var perfily;
                     testProperties.Expecting = "";
                 }
                 if ((typeof testProperties.Iterations !== "number") || (testProperties.Iterations <= 0)) {
-                    testProperties.Iterations = 1;
+                    var suiteIterations = perfily.data.GetProperty(testProperties.Suite, "Iterations");
+                    if (suiteIterations == false) {
+                        suiteIterations = 1;
+                    }
+                    testProperties.Iterations = suiteIterations;
                 }
                 if (typeof testProperties.Output !== "boolean") {
-                    testProperties.Output = false;
+                    testProperties.Output = perfily.data.GetProperty(testProperties.Suite, "Output");
                 }
                 if (typeof testProperties.OutputIntoDocument !== "boolean") {
-                    testProperties.OutputIntoDocument = false;
+                    testProperties.OutputIntoDocument = perfily.data.GetProperty(testProperties.Suite, "OutputIntoDocument");
                 }
                 else if (testProperties.OutputIntoDocument) {
                     testProperties.Output = true;
                 }
-                if ((typeof testProperties.Suite !== "string") || (testProperties.Suite == "")) {
-                    testProperties.Suite = "generic";
-                }
-                perfily.suite.New(testProperties.Suite, {});
-                var id = perfily.test.NewId(testProperties.Suite);
                 perfily.data.store[id] = testProperties;
                 perfily.data.GetProperty(testProperties.Suite, "Tests").push(id);
                 if (testProperties.Autorun) {

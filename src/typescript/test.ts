@@ -17,17 +17,25 @@ module perfily.test {
 	// New
 	// This function creates the Test based on testProperties
 	export function New(testProperties : any) : string {
-		if ((typeof testProperties == "object") && (!Array.isArray(testProperties))) { // If testProperties
-			if (typeof testProperties.AutoclearExpecting == "undefined"){ // If AutoclearExpecting is not defined
-				testProperties.AutoclearExpecting = false; // Do not autoclear expecting after a test.
+		if ((typeof testProperties == "object") && (!Array.isArray(testProperties))) { // If testProperties is an Object
+			// #region Suite and Id
+
+			if ((typeof testProperties.Suite !== "string") || (testProperties.Suite == "")){ // If Suite is not a string
+				testProperties.Suite = "generic"; // Set to generic Suite name
+			}
+
+			perfily.suite.New(testProperties.Suite, {}); // Create the Suite if necessary
+			var id : string = perfily.test.NewId(testProperties.Suite); // Get a new test Id
+
+			// #endregion
+
+
+			if (typeof testProperties.AutoclearExpecting !== "boolean"){ // If AutoclearExpecting is not a boolean
+				testProperties.AutoclearExpecting = perfily.data.GetProperty(testProperties.Suite, "AutoclearExpecting"); // Set AutoclearExpecting to whatever is set by the Suite (or false)
 			}
 
 			if (typeof testProperties.Autorun !== "boolean"){ // If Autorun is not a boolean
-				testProperties.Autorun = false; // Do not autorun test
-			}
-
-			if (typeof testProperties.AutoclearExpecting !== "boolean"){ // If AutoclearExpecting is not a boolean
-				testProperties.AutoclearExpecting = false; // Do not autoclear expecting var
+				testProperties.Autorun = perfily.data.GetProperty(testProperties.Suite, "Autorun"); // Set Aurotun to whatever is set by the Suite (or false)
 			}
 
 			if (typeof testProperties.Description !== "string"){ // If Description is not a string
@@ -39,25 +47,24 @@ module perfily.test {
 			}
 
 			if ((typeof testProperties.Iterations !== "number") || (testProperties.Iterations <= 0)){ // If Iterations is not a number or is less than or equal to 0
-				testProperties.Iterations = 1; // Set to a single iteration
+				let suiteIterations : any = perfily.data.GetProperty(testProperties.Suite, "Iterations"); // Set suiteIterations to the Iterations (if any) of the Suite
+
+				if (suiteIterations == false){ // If we were returned false (Iteration doesn't exist)
+					suiteIterations = 1; // Change to 1
+				}
+
+				testProperties.Iterations = suiteIterations;
 			}
 
 			if (typeof testProperties.Output !== "boolean"){ // If Output is not a boolean
-				testProperties.Output = false; // Set to not output result automatically
+				testProperties.Output = perfily.data.GetProperty(testProperties.Suite, "Output"); // Set Output to whatever is set by the Suite (or false)
 			}
 
 			if (typeof testProperties.OutputIntoDocument !== "boolean"){ // If OutputIntoDocument is not a boolean
-				testProperties.OutputIntoDocument = false; // Do not output into document (if Output is set to true, will output to console if OutputIntoDocument is false)
+				testProperties.OutputIntoDocument = perfily.data.GetProperty(testProperties.Suite, "OutputIntoDocument"); // Set OutputIntoDocument to whatever is set by the Suite (or false)
 			} else if (testProperties.OutputIntoDocument){ // If we are outputting into document
                 testProperties.Output = true; // Ensure we actually output by setting Output to true
             }
-
-			if ((typeof testProperties.Suite !== "string") || (testProperties.Suite == "")){ // If Suite is not a string
-				testProperties.Suite = "generic"; // Set to generic Suite name
-			}
-
-			perfily.suite.New(testProperties.Suite, {}); // Create the Suite if necessary
-			var id : string = perfily.test.NewId(testProperties.Suite); // Get a new test Id
 
 			perfily.data.store[id] = testProperties; // Set the testProperties to the suite's test's value
             perfily.data.GetProperty(testProperties.Suite, "Tests").push(id); // Push the Test's Id to the Suite's Tests Array<string>

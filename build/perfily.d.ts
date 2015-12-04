@@ -10,6 +10,9 @@ interface sharedPerfProperties extends Object {
     OutputIntoDocument: boolean;
 }
 interface suiteProperties extends sharedPerfProperties {
+    AutoclearExpecting: boolean;
+    Autorun: boolean;
+    Iterations: boolean;
     LongestTestLength: number;
     LongestTestObject: testProperties;
     ShortestTestLength: number;
@@ -20,13 +23,13 @@ interface suiteProperties extends sharedPerfProperties {
 interface testProperties extends sharedPerfProperties {
     AutoclearExpecting: boolean;
     Autorun: boolean;
-    Description: string;
-    Duration: number;
     Expecting: any;
     Iterations: number;
-    Passed: boolean;
     Suite: string;
     TestFunction: Function;
+    Description: string;
+    Duration: number;
+    Passed: boolean;
 }
 declare module perfily.test {
     function NewId(suiteName: string): string;

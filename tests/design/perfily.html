@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<script>
-			perfily.suite.New("Perfily", {"Output" : true, "OutputIntoDocument" : true}); // Create a new Suite
+			perfily.suite.New("Perfily", { "Iterations" : 100, "Output" : true, "OutputIntoDocument" : true}); // Create a new Suite
 
 			var internalPerfilyInstance; // Define internalPerfilyInstance as the Perfily Instance that will actually be tested against
 
@@ -22,7 +22,6 @@
 
 			var perfilyDescriptionInstance = perfily.test.New({ // Create an instance of Perfily where we benchmark setting the description of the instance
 				"Description" : "Perfily SetProperty Description",
-				"Iterations" : 100,
 				"TestFunction" : function(){
 					perfily.data.SetProperty(internalPerfilyInstance, "Description", "Internal Perfily Instance");
 				},
@@ -32,7 +31,6 @@
 
 			var perfilyExpectingInstance = perfily.test.New({ // Create an instance of Perfily where we benchmark setting the Expecting of the instance
 				"Description" : "Perfily SetProperty Expecting",
-				"Iterations" : 100,
 				"TestFunction" : function(){
 					perfily.data.SetProperty(internalPerfilyInstance, "Expecting", "bacon");
 				},
@@ -42,7 +40,6 @@
 
 			var perfilySetTestFunctionInstance = perfily.test.New({ // Create an instance of Perfily where we benchmark setting the Function of the instance
 				"Description" : "Perfily SetProperty Function",
-				"Iterations" : 100,
 				"TestFunction" : function(){
 					perfily.data.SetProperty(internalPerfilyInstance, "TestFunction", function(){return "bacon"});
 				},
@@ -52,6 +49,7 @@
 
 			var perfilyRunInstance = perfily.test.New({ // Create an instance of Perfily where we run the internal Perfily Instance
 				"Description" : "Perfily Run",
+				"Iterations" : 1, // Override Suite default
 				"TestFunction" : function(){
 					perfily.test.Run(internalPerfilyInstance);
 				},
@@ -61,7 +59,6 @@
 
 			var perfilyExportInstance = perfily.test.New({ // Create an instance of Perfily where we run the Suite Export (and therefore also Test Export) function
 				"Description" : "Perfily Suite Export",
-				"Iterations" : 100,
 				"TestFunction" : function(){
 					perfily.suite.Export("Perfily", ["Description", "Duration"]);
 				},
