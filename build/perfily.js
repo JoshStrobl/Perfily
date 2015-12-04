@@ -274,4 +274,11 @@ var perfily;
 (function (perfily) {
     perfily.NewSuite = perfily.suite.New;
     perfily.NewTest = perfily.test.New;
+    perfily.ExportSuite = perfily.suite.Export;
+    perfily.ExportTest = perfily.test.Export;
+    perfily.RunSuite = perfily.suite.Run;
+    perfily.RunTest = perfily.test.Run;
+    perfily.GetProperty = perfily.data.GetProperty;
+    perfily.OutputResult = perfily.data.OutputResult;
+    perfily.SetProperty = perfily.data.SetProperty;
 })(perfily || (perfily = {}));

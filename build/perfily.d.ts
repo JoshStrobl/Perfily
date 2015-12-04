@@ -52,4 +52,11 @@ declare module perfily.suite {
 declare module perfily {
     var NewSuite: Function;
     var NewTest: Function;
+    var ExportSuite: Function;
+    var ExportTest: Function;
+    var RunSuite: Function;
+    var RunTest: Function;
+    var GetProperty: Function;
+    var OutputResult: Function;
+    var SetProperty: Function;
 }
