@@ -6,13 +6,13 @@ declare module perfily.data {
     function SetProperty(id: string, property: string, value: any): boolean;
 }
 interface sharedPerfProperties extends Object {
+    AutoclearExpecting: boolean;
+    Autorun: boolean;
+    Iterations: boolean;
     Output: boolean;
     OutputIntoDocument: boolean;
 }
 interface suiteProperties extends sharedPerfProperties {
-    AutoclearExpecting: boolean;
-    Autorun: boolean;
-    Iterations: boolean;
     LongestTestLength: number;
     LongestTestObject: testProperties;
     ShortestTestLength: number;
@@ -21,10 +21,7 @@ interface suiteProperties extends sharedPerfProperties {
     TotalDurationOfTests: number;
 }
 interface testProperties extends sharedPerfProperties {
-    AutoclearExpecting: boolean;
-    Autorun: boolean;
     Expecting: any;
-    Iterations: number;
     Suite: string;
     TestFunction: Function;
     Description: string;

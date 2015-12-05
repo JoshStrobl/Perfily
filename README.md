@@ -21,10 +21,19 @@ You'll also need to run the `bootstrap` tool from CodeUtils as well to get the n
 
 Both the Perfily Suite and Perfily Test creation functions accept a set of arguments in their properties Object. The options below are shared between both Suites and Tests, meaning that in both creation functions, you may add the following options:
 
-Option | Type | Default
----- | ----- | -----
-Output | boolean | false
-OutputIntoDocument | boolean | false
+Option | Type | Description | Default
+---- | ----- | ----- | -----
+AutoclearExpecting | boolean | Remove Expecting after each Run() | `false`
+Autorun | boolean | Automatically run the test after setting the function | `false`
+Iterations | number | Number of times to run TestFunction | `1`
+Output | boolean | Whether we should output the results after running the test | `false`
+OutputIntoDocument | boolean | Output the results into the document | `false`
+
+**AutoclearExpecting, Autorun, and Iterations**
+
+If these values are applied to a Suite, they will apply to all Tests in the Suite. However, you can override them individually, in each Test, by setting them to a different value than the Suite.
+
+**Output and OutputIntoDocument**
 
 If you set Output to `true` but did not set OutputIntoDocument, it will output to the browser's console.
 
@@ -42,7 +51,9 @@ suiteProperties | Object
 The example below creates a new Suite called SuiteName, with an empty Object (defaults to not outputting results).
 
 ``` javascript
-perfily.NewSuite("SuiteName", {});
+perfily.NewSuite("SuiteName", {
+	"Iterations" : 100 // Default to 100 Iterations for each Test
+});
 ```
 
 #### Perfily Test ####
@@ -51,11 +62,8 @@ You can create a Perfily Test by using the `perfily.test.New` function, or helpe
 
 Option | Type | Description | Default
 ---- | ----- | ----- | -----
-AutoclearExpecting | boolean | Remove Expecting after each Run() | `false`
-Autorun | boolean | Automatically run the test after setting the function | `false`
 Description | string | Description of this Perfily Test | ` `
 Expecting | any | What result to expect from TestFunction | ` `
-Iterations | number | Number of times to run TestFunction | `1`
 Suite | string | Name of the Suite (if any) to associate test with | `generic`
 TestFunction | Function | Function of this Perfily Test | ` `
 
@@ -81,18 +89,20 @@ var testId = perfily.NewTest({
 })
 ```
 
+---
+
 ### Methods ###
 
 #### Data ####
 
-`perfily.data.GetProperty` - This function will get the property specified from the Suite or Test specified.
+`perfily.data.GetProperty` - This function will get the property specified from the Suite or Test specified. You can also call this function with `perfily.GetProperty`.
 
 Option | Type
 ---- | -----
 Suite or Test Name | string
 Property | string
 
-**Returns**: Value of property or if Suite / Test does not exist, `false`.
+**Returns**: Value of property or if Suite / Test does not exist then `false`.
 
 **Example**:
 
@@ -102,9 +112,13 @@ In the example below, we get the ShortestTestLength from the Suite's Object.
 var value = perfily.data.GetProperty("SuiteName", "ShortestTestLength");
 ```
 
-`perfily.data.OutputResult` - This function will output the result of the Suite or Test, depending on what Id is provided.
+`perfily.data.OutputResult` - This function will output the result of the Suite or Test, depending on what Id is provided. You can also call this function with `perfily.OutputResult`.
 
-`perfily.data.SetProperty` - This function will set the property specified, with the value specified, to the Suite or Test.
+Option | Type
+---- | -----
+Suite or Test Name | string
+
+`perfily.data.SetProperty` - This function will set the property specified, with the value specified, to the Suite or Test. You can also call this function with `perfily.SetProperty`.
 
 Option | Type
 ---- | -----
@@ -120,7 +134,18 @@ perfily.data.SetProperty("generic5", "Description", "This is the description of 
 
 #### Suite ####
 
-`perfily.suite.OutputResult` - This function will output the results of the Suite. This is the same as calling `perfily.data.OutputResult`.
+`perfily.suite.Export` - This function will export an `Array<Object>`, where each `Object` contains the property / values requested from each Test in the Suite. This function is particularly handy for easily exporting data and having it be ingested by other libraries, such as [MetricsGraphics.js](http://metricsgraphicsjs.org).
+
+You can also call this function with `perfily.ExportSuite`.
+
+Option | Type
+---- | -----
+SuiteName | string
+options | Array<string>
+
+The options provided are the properties you wish to export.
+
+`perfily.suite.OutputResult` - This function will output the results of the Suite. This is the same as calling `perfily.data.OutputResult` or `perfily.OutputResult`.
 
 Option | Type
 ---- | -----
@@ -132,7 +157,7 @@ SuiteName | string
 perfily.suite.OutputResult("SuiteName");
 ```
 
-`perfily.suite.Run` - This function will run all the tests associated with the Suite.
+`perfily.suite.Run` - This function will run all the tests associated with the Suite. You can also call this function with `perfily.RunSuite`.
 
 Option | Type
 ---- | -----
@@ -146,15 +171,40 @@ perfily.suite.Run("SuiteName");
 
 #### Test ####
 
+`perfily.test.Export` - This function will export an `Object` which contains the property / values requested from the Test. This function is particularly handy for easily exporting data and having it be ingested by other libraries, such as [MetricsGraphics.js](http://metricsgraphicsjs.org).
+
+You can also call this function with `perfily.ExportTest`.
+
+Option | Type
+---- | -----
+TestName | string
+options | Array<string>
+
+The options provided are the properties you wish to export.
+
+`perfily.test.OutputResult` - This function will output the results of the Test. This is the same as calling `perfily.data.OutputResult` or `perfily.OutputResult`.
+
+Option | Type
+---- | -----
+TestName | string
+
+**Example**:
+
+``` javascript
+perfily.test.OutputResult("TestName1");
+```
+
 `perfily.test.Run` - This function will run the Test and do the following (amongst other things):
 
 1. Output if necessary.
 2. If the test is shortest or longest test, set to `ShortestTestLength` or `LongestTestLength`, as well as `ShortestTestObject` or `LongestTestObject` accordingly.
 3. Update the associated Suite's `TotalDurationOfTests` with the length of the Test.
 
+You can also call this function with `perfily.RunTest`.
+
 Option | Type
 ---- | -----
-Test Name | string
+TestName | string
 
 **Example**:
 
@@ -166,7 +216,7 @@ perfily.test.Run("generic5");
 
 Option | Type
 ---- | -----
-Test Name | string
+TestName | string
 Description | string
 
 **Example**:
@@ -179,7 +229,7 @@ perfily.test.SetDescription("generic5", "Description of generic5.");
 
 Option | Type
 ---- | -----
-Test Name | string
+TestName | string
 Expecting | any
 
 **Example**:
@@ -192,7 +242,7 @@ perfily.test.SetExpecting("generic5", 1337);
 
 Option | Type
 ---- | -----
-Test Name | string
+TestName | string
 Iterations | number
 
 **Example**:
@@ -207,7 +257,7 @@ However, differing from calling `perfily.data.SetProperty`, this function will a
 
 Option | Type
 ----- | -----
-Test Name | string
+TestName | string
 TestFunction | function
 
 **Example**:
@@ -215,6 +265,8 @@ TestFunction | function
 ``` javascript
 perfily.test.SetFunction("generic5", function(){});
 ```
+
+---
 
 ### Getting Results ###
 
