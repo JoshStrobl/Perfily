@@ -1,7 +1,0 @@
-{
-    "ProjectName": "Perfily",
-    "ContentTypes": [
-        "typescript"
-    ],
-    "UsesTests" : "yes"
-}

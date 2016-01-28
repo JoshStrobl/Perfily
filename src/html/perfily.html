@@ -1,4 +1,13 @@
-<!DOCTYPE html><html manifest=test.appcache><head><title>Perfily Test</title><script type=text/javascript src=js/perfily.min.js></script><meta charset="utf-8"></head><body><script>perfily.suite.New("Perfily", { "Iterations" : 100, "Output" : true, "OutputIntoDocument" : true}); // Create a new Suite
+<!DOCTYPE html>
+<html manifest="test.appcache">
+	<head>
+		<title>Perfily Test</title>
+		<script type="text/javascript" src="js/perfily.min.js"></script>
+		<meta charset="utf-8" />
+	</head>
+	<body>
+		<script>
+			perfily.suite.New("Perfily", { "Iterations" : 100, "Output" : true, "OutputIntoDocument" : true}); // Create a new Suite
 
 			var internalPerfilyInstance; // Define internalPerfilyInstance as the Perfily Instance that will actually be tested against
 
@@ -57,4 +66,7 @@
 				"Suite" : "Perfily"
 			});
 
-			perfily.suite.Run("Perfily"); // Run the Perfily Suite</script></body></html>
+			perfily.suite.Run("Perfily"); // Run the Perfily Suite
+		</script>
+	</body>
+</html>
